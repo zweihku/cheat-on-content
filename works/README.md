@@ -1,6 +1,6 @@
 # works/ · 成片库
 
-做好的视频放这里。一个系列一个文件夹，一集一个子文件夹。
+做好的视频放这里。一个系列一个文件夹，一集一个子文件夹；开始做一集就建它的文件夹，前期的稿子、美术、分镜也放在里面。
 
 ```
 works/
@@ -8,10 +8,14 @@ works/
 ├── .gitattributes             # 视频文件走 Git LFS
 └── math-life/                 # 系列：数学 × 生活（哲理短片）
     ├── PLAN.md                # 选题规划
-    └── EP01_这孩子不能夸/      # 做好一集建一个（示例，还没建）
-        ├── final.mp4          # 成片
+    └── EP01_他们都在哪儿/      # 一集一个文件夹
+        ├── script.md          # 稿子
+        ├── art-direction.md   # 美术方向
+        ├── storyboard.md      # 分镜
+        ├── frames/            # 美术样张（src/ 里是能重渲的源文件）
+        ├── final.mp4          # 成片（做好后放）
         ├── cover.jpg          # 封面（可选）
-        └── info.md            # 发布信息
+        └── info.md            # 发布信息（发布后填）
 ```
 
 ## 命名
@@ -22,12 +26,12 @@ works/
 ## info.md 模板
 
 ```markdown
-# EP01 这孩子不能夸
+# EP01 他们都在哪儿
 
-- 选题：C1（见 ../PLAN.md）
-- 时长：2:15
+- 选题：B4（见 ../PLAN.md）
+- 时长：3:20
 - 发布：2026-10-xx · 抖音 <链接> · 视频号 <链接>
-- 预测文件：predictions/2026-10-xx_<id>_这孩子不能夸.md（走 cheat-on-content 流程时填）
+- 预测文件：predictions/2026-10-xx_f4b4ca22abbc_他们都在哪儿.md（走 cheat-on-content 流程时填）
 - 复盘一句话：（T+3d 复盘后填）
 ```
 
