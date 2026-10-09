@@ -13,6 +13,7 @@ works/
         ├── art-direction.md   # 美术方向
         ├── storyboard.md      # 分镜
         ├── frames/            # 美术样张（src/ 里是能重渲的源文件）
+        ├── animatic/          # 动态版：预览、干净版、字幕（src/ 里是渲染源文件）
         ├── final.mp4          # 成片（做好后放）
         ├── cover.jpg          # 封面（可选）
         └── info.md            # 发布信息（发布后填）

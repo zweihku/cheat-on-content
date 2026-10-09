@@ -61,7 +61,7 @@ body { display: flex; flex-direction: column; gap: 40px; align-items: flex-start
 .seal svg { width: 100%; height: 100%; overflow: visible; }
 
 /* f02 stele */
-.stele { position: absolute; left: 96px; top: 400px; width: 888px; height: 1020px; border: 1px solid var(--gold-dim); }
+.stele { position: absolute; left: 96px; top: 330px; width: 888px; height: 1020px; border: 1px solid var(--gold-dim); }
 .stele::before { content: ""; position: absolute; inset: 14px; border: 1px solid rgba(201, 168, 106, .75); }
 .row { position: absolute; left: 56px; display: flex; align-items: baseline; }
 .row .op { width: 54px; font-family: var(--en); font-size: 36px; color: var(--gold-dim); }
@@ -82,10 +82,10 @@ body { display: flex; flex-direction: column; gap: 40px; align-items: flex-start
 .lrow.total .n { font-size: 84px; color: var(--gold); }
 
 /* f04 almanac */
-.page { position: absolute; left: 110px; top: 300px; width: 860px; height: 1180px; border: 1px solid var(--gold-dim); }
+.page { position: absolute; left: 110px; top: 270px; width: 860px; height: 1090px; border: 1px solid var(--gold-dim); }
 .page::before { content: ""; position: absolute; inset: 12px; border: 1px solid rgba(201, 168, 106, .7); }
 .vcol { position: absolute; writing-mode: vertical-rl; font-size: 44px; letter-spacing: .14em; line-height: 1; }
-.vrule { position: absolute; top: 312px; width: 1px; height: 1156px; background: rgba(201, 168, 106, .28); }
+.vrule { position: absolute; top: 282px; width: 1px; height: 1066px; background: rgba(201, 168, 106, .28); }
 .blank { position: absolute; width: 1px; background: linear-gradient(180deg, rgba(201, 168, 106, .85), rgba(201, 168, 106, .15)); }
 .blank::after { content: ""; position: absolute; left: -6px; bottom: -6px; width: 11px; height: 11px; border: 1px solid rgba(201, 168, 106, .6); border-radius: 50%; }
 
@@ -180,7 +180,7 @@ body { display: flex; flex-direction: column; gap: 40px; align-items: flex-start
 <section class="frame" id="f04" data-name="almanac" data-title="04 你的参数">
   <canvas></canvas><svg class="layer" viewBox="0 0 1080 1920"></svg>
   <div class="mark"><span class="cn">余数</span><span class="rule"></span><span class="ep">EP 01</span></div>
-  <div class="abs kicker" style="left:0; right:0; top:232px; text-align:center; letter-spacing:.5em;">你的公式　前几项</div>
+  <div class="abs kicker" style="left:0; right:0; top:200px; text-align:center; letter-spacing:.5em;">你的公式　前几项</div>
   <div class="page"></div>
   <div class="vrule" style="left:860px;"></div>
   <div class="vrule" style="left:750px;"></div>
@@ -188,19 +188,19 @@ body { display: flex; flex-direction: column; gap: 40px; align-items: flex-start
   <div class="vrule" style="left:530px;"></div>
   <div class="vrule" style="left:420px;"></div>
   <div class="vrule" style="left:310px;"></div>
-  <div class="vcol gold" style="left:886px; top:372px; font-size:54px; font-weight:900; letter-spacing:.3em;">生年所定</div>
-  <div class="vcol" style="left:783px; top:372px;">那一年出生的孩子</div>
-  <div class="vcol" style="left:673px; top:372px;">男孩与女孩之比</div>
-  <div class="vcol" style="left:563px; top:372px;">你长大的那座城</div>
-  <div class="vcol" style="left:453px; top:372px;">同代人读大学的</div>
-  <div class="vcol" style="left:343px; top:372px;">后来成婚的年纪</div>
-  <div class="blank" style="left:805px; top:820px; height:520px;"></div>
-  <div class="blank" style="left:695px; top:772px; height:568px;"></div>
-  <div class="blank" style="left:585px; top:772px; height:568px;"></div>
-  <div class="blank" style="left:475px; top:772px; height:568px;"></div>
-  <div class="blank" style="left:365px; top:772px; height:568px;"></div>
-  <div class="vcol gold" style="left:226px; top:372px; font-size:50px; font-weight:600; letter-spacing:.3em;">皆已写定</div>
-  <div class="seal" data-seal="写定" style="left:150px; top:1250px; width:128px; height:128px; transform:rotate(-5deg);"></div>
+  <div class="vcol gold" style="left:886px; top:342px; font-size:54px; font-weight:900; letter-spacing:.3em;">生年所定</div>
+  <div class="vcol" style="left:783px; top:342px;">那一年出生的孩子</div>
+  <div class="vcol" style="left:673px; top:342px;">男孩与女孩之比</div>
+  <div class="vcol" style="left:563px; top:342px;">你长大的那座城</div>
+  <div class="vcol" style="left:453px; top:342px;">同代人读大学的</div>
+  <div class="vcol" style="left:343px; top:342px;">后来成婚的年纪</div>
+  <div class="blank" style="left:805px; top:790px; height:450px;"></div>
+  <div class="blank" style="left:695px; top:742px; height:498px;"></div>
+  <div class="blank" style="left:585px; top:742px; height:498px;"></div>
+  <div class="blank" style="left:475px; top:742px; height:498px;"></div>
+  <div class="blank" style="left:365px; top:742px; height:498px;"></div>
+  <div class="vcol gold" style="left:226px; top:342px; font-size:50px; font-weight:600; letter-spacing:.3em;">皆已写定</div>
+  <div class="seal" data-seal="写定" style="left:150px; top:1180px; width:128px; height:128px; transform:rotate(-5deg);"></div>
   <div class="grain"></div><div class="vignette"></div>
 </section>
 
@@ -433,7 +433,7 @@ function seal(box) {
   ctx.save(); ctx.globalCompositeOperation = 'multiply';
   for (let i = 0; i <= 140; i++) {
     const t = i / 140, wob = Math.sin(t * 6.3) * 34 + Math.sin(t * 17 + 1.3) * 14;
-    glow(ctx, x1 + dx * t + nx * (wob - 12), y1 + dy * t + ny * (wob - 12), 70 + 30 * Math.sin(t * 9), '10,11,16', .22);
+    glow(ctx, x1 + dx * t + nx * (wob - 12), y1 + dy * t + ny * (wob - 12), 70 + 30 * Math.sin(t * 9), '10,11,16', .16);
   }
   ctx.restore();
   // 地平线的光晕一直铺到底，不留硬边

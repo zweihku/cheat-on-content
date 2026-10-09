@@ -1,0 +1,5 @@
+# 临时配乐随时可以用 src/sound.py 重新生成，40 MB 的 wav 不进 git
+temp_audio.wav
+# 渲染中间文件和静帧检查
+.EP01_subs*.mp4
+src/stills/

@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>EP01 他们都在哪儿 · 动态版</title>
+<style>
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.3.0/400.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.3.0/600.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-sc@5.3.0/900.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/eb-garamond@5.3.0/400.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/eb-garamond@5.3.0/400-italic.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/eb-garamond@5.3.0/500-italic.css");
+
+:root {
+  --gold: #C9A86A; --gold-dim: rgba(201, 168, 106, .45);
+  --bone: #ECE4D3; --bone-dim: rgba(236, 228, 211, .62);
+  --cinnabar-hi: #D0583F; --dust: #7A7F92;
+  --cn: "Noto Serif SC", serif; --en: "EB Garamond", "Noto Serif SC", serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #000; width: 1080px; height: 1920px; overflow: hidden; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; background: #0A0B10; color: var(--bone); font-family: var(--cn); }
+.scene { position: absolute; inset: 0; visibility: hidden; opacity: 0; background: radial-gradient(120% 80% at 50% 36%, #171D33 0%, #0E111C 55%, #0A0B10 100%); }
+.cam { position: absolute; inset: 0; }
+.cam > canvas, .cam > svg.layer { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+.abs { position: absolute; }
+.vert { writing-mode: vertical-rl; line-height: 1; }
+.gold { color: var(--gold); } .dim { color: var(--bone-dim); } .dust { color: var(--dust); }
+.it { font-family: var(--en); font-style: italic; } .en { font-family: var(--en); }
+.num { font-family: var(--en); font-variant-numeric: lining-nums tabular-nums; }
+.kicker { font-size: 28px; letter-spacing: .42em; color: var(--gold); }
+.ch { display: inline-block; opacity: 0; }
+.seal { position: absolute; opacity: 0; }
+.seal svg { width: 100%; height: 100%; overflow: visible; }
+
+#mark { position: absolute; top: 118px; left: 84px; display: flex; align-items: baseline; gap: 16px; opacity: 0; }
+#mark .cn { font-weight: 600; font-size: 32px; letter-spacing: .32em; }
+#mark .ep { font-family: var(--en); font-style: italic; font-size: 26px; color: var(--gold); letter-spacing: .06em; }
+#mark .rule { width: 60px; height: 1px; background: var(--gold-dim); transform: translateY(-9px); }
+#sub { position: absolute; left: 110px; right: 110px; top: 1392px; text-align: center; font-weight: 600; font-size: 44px; line-height: 1.45; letter-spacing: .05em; text-shadow: 0 2px 12px rgba(0, 0, 0, .8), 0 0 2px rgba(0, 0, 0, .6); text-wrap: balance; visibility: hidden; }
+.grain { position: absolute; inset: 0; pointer-events: none; opacity: .09; mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .93  0 0 0 0 .89  0 0 0 0 .83  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+.vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(95% 72% at 50% 44%, transparent 52%, rgba(0, 0, 0, .6) 100%); }
+#black { position: absolute; inset: 0; background: #000; pointer-events: none; }
+
+/* B 公式碑 */
+.stele { position: absolute; left: 96px; top: 330px; width: 888px; height: 1020px; border: 1px solid var(--gold-dim); opacity: 0; }
+.stele::before { content: ""; position: absolute; inset: 14px; border: 1px solid rgba(201, 168, 106, .75); }
+.row { position: absolute; left: 56px; display: flex; align-items: baseline; opacity: 0; }
+.row .op { width: 54px; font-family: var(--en); font-size: 36px; color: var(--gold-dim); }
+.row .term { width: 190px; font-family: var(--en); font-style: italic; font-size: 66px; color: var(--gold); line-height: 1; }
+.row .term sub, .eqline sub { font-size: .5em; vertical-align: -.25em; margin-left: .04em; }
+.row .label { font-size: 36px; color: var(--bone); letter-spacing: .08em; }
+.row.L .label { font-weight: 600; }
+.uline { position: absolute; left: 110px; width: 560px; top: 948px; height: 1px; background: linear-gradient(90deg, rgba(208, 88, 63, .85), rgba(208, 88, 63, 0)); transform-origin: left; transform: scaleX(0); }
+
+/* C 伦敦 */
+.ledger { position: absolute; left: 84px; top: 1010px; }
+.lrow { display: flex; align-items: baseline; height: 60px; opacity: 0; }
+.lrow .n { width: 300px; text-align: right; font-family: var(--en); font-variant-numeric: lining-nums tabular-nums; font-size: 50px; color: var(--bone); }
+.lrow .n.op { color: var(--gold); }
+.lrow .t { margin-left: 34px; font-size: 30px; color: var(--bone-dim); letter-spacing: .06em; }
+.lrule { width: 300px; height: 1px; background: var(--gold-dim); margin: 10px 0 14px; transform-origin: right; transform: scaleX(0); }
+.lrow.total { opacity: 0; }
+.lrow.total .n { font-size: 84px; color: var(--gold); }
+
+/* D 历书 */
+.page { position: absolute; left: 110px; top: 270px; width: 860px; height: 1090px; border: 1px solid var(--gold-dim); opacity: 0; }
+.page::before { content: ""; position: absolute; inset: 12px; border: 1px solid rgba(201, 168, 106, .7); }
+.vrule { position: absolute; top: 282px; width: 1px; height: 1066px; background: rgba(201, 168, 106, .28); transform-origin: top; transform: scaleY(0); }
+.vcol { position: absolute; writing-mode: vertical-rl; font-size: 44px; letter-spacing: .14em; line-height: 1; }
+.blank { position: absolute; width: 1px; background: linear-gradient(180deg, rgba(201, 168, 106, .85), rgba(201, 168, 106, .15)); transform-origin: top; transform: scaleY(0); }
+.blank::after { content: ""; position: absolute; left: -6px; bottom: -6px; width: 11px; height: 11px; border: 1px solid rgba(201, 168, 106, .6); border-radius: 50%; }
+
+/* E 两团星 */
+.year { position: absolute; width: 420px; text-align: center; font-family: var(--en); font-variant-numeric: lining-nums; font-size: 92px; color: var(--gold); line-height: 1; opacity: 0; }
+.amount { position: absolute; width: 420px; text-align: center; font-size: 40px; letter-spacing: .06em; opacity: 0; }
+
+/* I 结尾 */
+.eqline { position: absolute; left: 0; right: 0; top: 268px; text-align: center; font-family: var(--en); font-style: italic; font-size: 66px; letter-spacing: .02em; opacity: 0; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="rough" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="3" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="5"/>
+    </filter>
+    <filter id="wear" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3" result="w"/>
+      <feColorMatrix in="w" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -3.2 2.75" result="m"/>
+      <feComposite in="SourceGraphic" in2="m" operator="in"/>
+    </filter>
+    <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#C9A86A" stop-opacity="0"/>
+      <stop offset=".42" stop-color="#C9A86A" stop-opacity=".16"/>
+      <stop offset=".5" stop-color="#ECE4D3" stop-opacity=".22"/>
+      <stop offset=".58" stop-color="#C9A86A" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#C9A86A" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div id="stage">
+
+<!-- A 开场 -->
+<section class="scene" id="sA"><div class="cam">
+  <canvas></canvas><svg class="layer" viewBox="0 0 1080 1920"></svg>
+  <div class="abs vert" id="aText" style="right:190px; top:400px; font-size:60px; letter-spacing:.16em;">
+    <p>你这辈子会不会遇见那个人</p>
+    <p style="margin-block-start:44px;">有一部分答案</p>
+    <p style="margin-block-start:44px;">在你出生之前就<span class="gold">写好了</span></p>
+  </div>
+  <div class="abs dust" id="aYou" style="left:250px; top:1300px; font-size:26px; letter-spacing:.3em; opacity:0;">你</div>
+  <div class="abs" id="aCoord" style="left:84px; top:1430px; opacity:0;">
+    <div class="it gold" style="font-size:26px; letter-spacing:.04em; opacity:.8;">M42 · RA 05h 35m 17s · Dec −05° 23′ 28″</div>
+    <div class="dust" style="font-size:22px; letter-spacing:.3em; margin-top:10px;">猎户座大星云　恒星诞生的地方</div>
+  </div>
+</div></section>
+
+<!-- B 德雷克公式 -->
+<section class="scene" id="sB"><div class="cam">
+  <canvas></canvas><svg class="layer" viewBox="0 0 1080 1920"></svg>
+  <div class="stele" id="bStele">
+    <div class="abs dim" id="bDate" style="left:56px; top:52px; font-size:26px; letter-spacing:.32em;">一九六一年十一月一日　绿岸天文台</div>
+    <div class="abs it gold" id="bN" style="left:52px; top:110px; font-size:124px; line-height:1; opacity:0;">N =</div>
+    <div class="abs dim" id="bGal" style="left:58px; top:262px; font-size:28px; letter-spacing:.12em;">银河系里，能和我们说上话的文明</div>
+    <div class="row" style="top:350px;"><span class="op"></span><span class="term">R<sub>∗</sub></span><span class="label">每年诞生的恒星</span></div>
+    <div class="row" style="top:438px;"><span class="op">×</span><span class="term">f<sub>p</sub></span><span class="label">有行星的</span></div>
+    <div class="row" style="top:526px;"><span class="op">×</span><span class="term">n<sub>e</sub></span><span class="label">适合居住的</span></div>
+    <div class="row" style="top:614px;"><span class="op">×</span><span class="term">f<sub>l</sub></span><span class="label">长出生命的</span></div>
+    <div class="row" style="top:702px;"><span class="op">×</span><span class="term">f<sub>i</sub></span><span class="label">长出智慧的</span></div>
+    <div class="row" style="top:790px;"><span class="op">×</span><span class="term">f<sub>c</sub></span><span class="label">学会发信号的</span></div>
+    <div class="row L" style="top:878px;"><span class="op">×</span><span class="term" id="bL">L</span><span class="label">愿意发出信号多久</span></div>
+    <div class="uline" id="bUline"></div>
+    <div class="seal" id="bSeal" data-seal="一九六一" style="right:-34px; top:-58px; width:156px; height:156px; --rot:-6deg;"></div>
+  </div>
+</div></section>
+
+<!-- C 伦敦 2010 -->
+<section class="scene" id="sC"><div class="cam">
+  <canvas></canvas>
+  <div class="abs kicker" id="cKick" style="left:84px; top:228px;">伦敦　二〇一〇</div>
+  <div class="abs" style="left:84px; top:290px; font-size:50px; font-weight:600; line-height:1.45; letter-spacing:.04em;">
+    <div id="cT1">一个经济学讲师</div><div id="cT2">算自己为什么没有女朋友</div>
+  </div>
+  <div class="ledger">
+    <div class="lrow"><span class="n">10,510</span><span class="t">住在伦敦 · 年龄合适 · 读过大学</span></div>
+    <div class="lrow"><span class="n op">× 1/20</span><span class="t">觉得他有魅力</span></div>
+    <div class="lrow"><span class="n op">× 1/2</span><span class="t">单身</span></div>
+    <div class="lrow"><span class="n op">× 1/10</span><span class="t">聊得来</span></div>
+    <div class="lrule"></div>
+    <div class="lrow total"><span class="n" id="cTotal">10,510</span><span class="t" id="cOdds" style="font-size:26px; opacity:0;">一晚遇见其中一个　<span class="num gold" style="font-size:34px;">1 / 285,000</span></span></div>
+  </div>
+</div></section>
+
+<!-- D 历书 -->
+<section class="scene" id="sD"><div class="cam">
+  <canvas></canvas>
+  <div class="abs kicker" id="dKick" style="left:0; right:0; top:200px; text-align:center; letter-spacing:.5em;">你的公式　前几项</div>
+  <div class="page" id="dPage"></div>
+  <div class="vrule" style="left:860px;"></div><div class="vrule" style="left:750px;"></div><div class="vrule" style="left:640px;"></div>
+  <div class="vrule" style="left:530px;"></div><div class="vrule" style="left:420px;"></div><div class="vrule" style="left:310px;"></div>
+  <div class="vcol gold" id="dHead" style="left:886px; top:342px; font-size:54px; font-weight:900; letter-spacing:.3em;">生年所定</div>
+  <div class="vcol" id="dC1" style="left:783px; top:342px;">那一年出生的孩子</div>
+  <div class="vcol" id="dC2" style="left:673px; top:342px;">男孩与女孩之比</div>
+  <div class="vcol" id="dC3" style="left:563px; top:342px;">你长大的那座城</div>
+  <div class="vcol" id="dC4" style="left:453px; top:342px;">同代人读大学的</div>
+  <div class="vcol" id="dC5" style="left:343px; top:342px;">后来成婚的年纪</div>
+  <div class="blank" id="dB1" style="left:805px; top:790px; height:450px;"></div>
+  <div class="blank" id="dB2" style="left:695px; top:742px; height:498px;"></div>
+  <div class="blank" id="dB3" style="left:585px; top:742px; height:498px;"></div>
+  <div class="blank" id="dB4" style="left:475px; top:742px; height:498px;"></div>
+  <div class="blank" id="dB5" style="left:365px; top:742px; height:498px;"></div>
+  <div class="vcol gold" id="dDone" style="left:226px; top:342px; font-size:50px; font-weight:600; letter-spacing:.3em;">皆已写定</div>
+  <div class="seal" id="dSeal" data-seal="写定" style="left:150px; top:1180px; width:128px; height:128px; --rot:-5deg;"></div>
+</div></section>
+
+<!-- E 十二年 -->
+<section class="scene" id="sE"><div class="cam">
+  <canvas></canvas>
+  <div class="abs kicker" id="eKick" style="left:84px; top:228px;">全国结婚登记</div>
+  <div class="abs dust" id="eNote" style="left:84px; top:284px; font-size:26px; letter-spacing:.2em; opacity:0;">每一颗星，是一万对新人</div>
+  <div class="year" id="eY1" style="left:90px; top:1044px;">2013</div>
+  <div class="amount" id="eA1" style="left:90px; top:1152px;">1347 万对</div>
+  <div class="year" id="eY2" style="left:580px; top:1044px;">2025</div>
+  <div class="amount" id="eA2" style="left:580px; top:1152px;">676 万对</div>
+  <div class="abs" id="eHalf" style="left:0; right:0; top:1290px; text-align:center; font-size:66px; font-weight:600; letter-spacing:.12em;">十二年，少了一半。</div>
+  <div class="abs dust" id="eSrc" style="left:0; right:0; top:1402px; text-align:center; font-size:22px; letter-spacing:.12em; opacity:0;">数据：民政部　2013 年 · 《2025 年民政事业发展统计公报》</div>
+</div></section>
+
+<!-- F 你和星盘 -->
+<section class="scene" id="sF"><div class="cam">
+  <canvas></canvas><svg class="layer" viewBox="0 0 1080 1920"></svg>
+</div></section>
+
+<!-- G 银河与城市 -->
+<section class="scene" id="sG"><div class="cam">
+  <canvas></canvas>
+</div>
+  <div class="abs vert" id="gTitle" style="left:560px; top:300px; font-size:118px; font-weight:600; letter-spacing:.2em; text-shadow:0 0 40px rgba(10,11,16,.9), 0 0 18px rgba(10,11,16,.9);">他们都在哪儿</div>
+  <div class="abs" id="gQuote" style="left:96px; top:1010px; opacity:0;">
+    <div class="it gold" style="font-size:40px;">“Where is everybody?”</div>
+    <div class="en gold" style="font-size:24px; letter-spacing:.2em; margin-top:12px; opacity:.75;">ENRICO FERMI · 1950</div>
+  </div>
+</section>
+
+<!-- H 金唱片 -->
+<section class="scene" id="sH"><div class="cam">
+  <canvas></canvas><svg class="layer" viewBox="0 0 1080 1920"></svg>
+  <div class="abs kicker" id="hKick" style="left:84px; top:228px;">旅行者号　一九七七</div>
+  <div class="abs dust" id="hNote" style="left:84px; top:284px; font-size:26px; letter-spacing:.2em;">五十五种语言的问候　普通话那一句</div>
+  <div class="abs vert" id="hGreet" style="left:390px; top:1078px; font-size:46px; letter-spacing:.14em;">
+    <p id="hG1">各位都好吧？</p>
+    <p id="hG2" style="margin-block-start:40px;">我们都很想念你们，</p>
+    <p id="hG3" style="margin-block-start:40px;" class="gold">有空请到这儿来玩。</p>
+  </div>
+</div></section>
+
+<!-- I 结尾 -->
+<section class="scene" id="sI"><div class="cam">
+  <canvas></canvas><svg class="layer" viewBox="0 0 1080 1920"></svg>
+  <div class="eqline" id="iEq"><span>N</span> <span>=</span> <span>R<sub>∗</sub></span> <span>·</span> <span>f<sub>p</sub></span> <span>·</span> <span>n<sub>e</sub></span> <span>·</span> <span>f<sub>l</sub></span> <span>·</span> <span>f<sub>i</sub></span> <span>·</span> <span>f<sub>c</sub></span> <span>·</span> <span id="iL">L</span></div>
+  <div class="seal" id="iSeal" data-seal="由你" style="left:812px; top:392px; width:124px; height:124px; --rot:-5deg;"></div>
+  <div class="abs vert" style="left:404px; top:640px; font-size:64px; letter-spacing:.2em;">
+    <p id="iO1">数学就算到这儿</p>
+    <p id="iO2" style="margin-block-start:46px;">剩下除不尽的</p>
+    <p id="iO3" style="margin-block-start:46px;" class="gold">叫生活</p>
+  </div>
+  <div class="abs" style="left:0; right:0; top:1340px; text-align:center;">
+    <div id="iLogo" style="font-size:58px; font-weight:900; letter-spacing:.6em; margin-left:.6em; opacity:0;">余数</div>
+    <div class="dust" id="iEp" style="font-size:24px; letter-spacing:.4em; margin-top:18px; margin-left:.4em; opacity:0;">第一集　他们都在哪儿</div>
+  </div>
+</div></section>
+
+<div id="mark"><span class="cn">余数</span><span class="rule"></span><span class="ep">EP 01</span></div>
+<div id="sub"></div>
+<div class="grain"></div><div class="vignette"></div>
+<div id="black"></div>
+</div>
+
+<script src="timeline.js"></script>
+<script>
+const TL = window.TIMELINE, M = TL.markers, RATE = 3.6, XF = 1.0;
+const sentStart = (s) => TL.sentences.find((x) => x.text.includes(s)).start;
+const MANSIONS = '角亢氐房心尾箕斗牛女虚危室壁奎娄胃昴毕觜参井鬼柳星张翼轸'.split('');
+const BONE = '236,228,211', GOLD = '201,168,106', CIN = '208,88,63', NIGHT = '120,132,178', NS = 'http://www.w3.org/2000/svg';
+
+// ---------- 小工具 ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, p) => a + (b - a) * p;
+const prog = (t, t0, d) => clamp((t - t0) / d);
+const easeIO = (p) => (p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+const easeOut = (p) => 1 - Math.pow(1 - p, 3);
+const easeIn = (p) => p * p * p;
+const easeBack = (p) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(p - 1, 3) + c1 * Math.pow(p - 1, 2); };
+const $ = (s) => document.querySelector(s);
+function fadeIn(el, t, t0, d = .7, y = 0) { const p = easeOut(prog(t, t0, d)); el.style.opacity = p; if (y) el.style.transform = `translateY(${(1 - p) * y}px)`; return p; }
+function rng(seed) { let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function gauss(r) { let u = 0, v = 0; while (!u) u = r(); while (!v) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+function dot(ctx, x, y, r, rgb, a) { ctx.fillStyle = `rgba(${rgb},${a})`; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); }
+function glow(ctx, x, y, r, rgb, a) { const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, `rgba(${rgb},${a})`); g.addColorStop(1, `rgba(${rgb},0)`); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); }
+function off(w = 1080, h = 1920) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+
+// 星空：分成若干层（bin），每层可以单独熄灭
+function starBins(w, h, { seed, count, maxR = 2.2, gold = .12, bins = 1, alpha = 1 }) {
+  const cs = Array.from({ length: bins }, () => off(w, h)), xs = cs.map((c) => c.getContext('2d')), r = rng(seed);
+  for (let i = 0; i < count; i++) {
+    const x = r() * w, y = r() * h, s = .35 + Math.pow(r(), 3.2) * maxR, a = (.16 + r() * .7) * alpha, c = r() < gold ? GOLD : BONE, b = Math.floor(r() * bins);
+    dot(xs[b], x, y, s, c, a); if (s > maxR * .62) glow(xs[b], x, y, s * 7, c, a * .22);
+  }
+  return cs;
+}
+function twinklers(seed, n, w = 1080, h = 1920) { const r = rng(seed); return Array.from({ length: n }, () => ({ x: r() * w, y: r() * h, s: .9 + r() * 1.3, ph: r() * 6.28, sp: 1.0 + r() * 1.6, c: r() < .2 ? GOLD : BONE })); }
+function drawTwinkle(ctx, list, t, mul = 1) { for (const k of list) { const a = (.25 + .75 * (.5 + .5 * Math.sin(t * k.sp + k.ph))) * mul; dot(ctx, k.x, k.y, k.s, k.c, a * .9); glow(ctx, k.x, k.y, k.s * 6, k.c, a * .18); } }
+
+function ring(svg, { cx, cy, r, opacity = .5, labels = true }) {
+  const g = el('g', { opacity }, svg);
+  el('circle', { cx, cy, r, fill: 'none', stroke: '#C9A86A', 'stroke-width': 1 }, g);
+  el('circle', { cx, cy, r: r - 24, fill: 'none', stroke: '#C9A86A', 'stroke-width': .6, 'stroke-opacity': .55 }, g);
+  el('circle', { cx, cy, r: r + 58, fill: 'none', stroke: '#C9A86A', 'stroke-width': .6, 'stroke-opacity': .45 }, g);
+  for (let d = 0; d < 360; d++) {
+    const len = d % 15 === 0 ? 20 : (d % 5 === 0 ? 12 : 5), a = (d - 90) * Math.PI / 180;
+    el('line', { x1: cx + Math.cos(a) * r, y1: cy + Math.sin(a) * r, x2: cx + Math.cos(a) * (r - len), y2: cy + Math.sin(a) * (r - len), stroke: '#C9A86A', 'stroke-width': d % 15 === 0 ? 1 : .6, 'stroke-opacity': d % 5 === 0 ? .9 : .45 }, g);
+  }
+  if (labels) MANSIONS.forEach((ch, i) => {
+    const deg = i * 360 / 28, a = (deg - 90) * Math.PI / 180, x = cx + Math.cos(a) * (r + 30), y = cy + Math.sin(a) * (r + 30);
+    el('text', { x, y, 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: '#C9A86A', 'font-size': 22, 'font-family': 'Noto Serif SC', transform: `rotate(${deg} ${x} ${y})` }, g).textContent = ch;
+    const a2 = (deg + 180 / 28 - 90) * Math.PI / 180;
+    el('line', { x1: cx + Math.cos(a2) * r, y1: cy + Math.sin(a2) * r, x2: cx + Math.cos(a2) * (r + 58), y2: cy + Math.sin(a2) * (r + 58), stroke: '#C9A86A', 'stroke-width': .6, 'stroke-opacity': .5 }, g);
+  });
+  return { g, cx, cy, spin(deg) { g.setAttribute('transform', `rotate(${deg} ${cx} ${cy})`); } };
+}
+function buildSeal(box) {
+  const chars = box.dataset.seal.split(''), n = chars.length;
+  const svg = el('svg', { viewBox: '0 0 100 100' }); box.appendChild(svg);
+  const g = el('g', { filter: 'url(#wear)' }, svg);
+  el('rect', { x: 5, y: 5, width: 90, height: 90, rx: 5, fill: '#B3412E', filter: 'url(#rough)' }, g);
+  el('rect', { x: 11, y: 11, width: 78, height: 78, rx: 3, fill: 'none', stroke: '#F2E7D3', 'stroke-width': 1.6, 'stroke-opacity': .9 }, g);
+  // 四字印按今天的阅读习惯从左到右、从上到下排
+  const pos = n === 4 ? [[31, 31], [69, 31], [31, 70], [69, 70]] : n === 2 ? [[50, 31], [50, 70]] : [[50, 51]];
+  const fs = n === 4 ? 34 : n === 2 ? 37 : 58;
+  chars.forEach((ch, i) => { el('text', { x: pos[i][0], y: pos[i][1], 'text-anchor': 'middle', 'dominant-baseline': 'central', fill: '#F2E7D3', 'font-size': fs, 'font-weight': 900, 'font-family': 'Noto Serif SC' }, g).textContent = ch; });
+}
+// 盖印：返回画面震动的位移（像素）
+function stamp(box, t, t0) {
+  if (t < t0) { box.style.opacity = 0; return 0; }
+  const p = prog(t, t0, .24), rot = box.style.getPropertyValue('--rot') || '0deg';
+  box.style.opacity = clamp((t - t0) / .08);
+  box.style.transform = `rotate(${rot}) scale(${1.32 - .32 * easeBack(p)})`;
+  const k = t - t0;
+  return k > .2 && k < .42 ? 5 * (1 - (k - .2) / .22) * Math.sin(k * 120) : 0;
+}
+// 逐字浮现
+const CH = new Map();
+function chars(id) {
+  if (CH.has(id)) return CH.get(id);
+  const root = document.getElementById(id);
+  const walk = (node) => [...node.childNodes].forEach((n) => {
+    if (n.nodeType === 3) {
+      const frag = document.createDocumentFragment();
+      for (const c of n.textContent) {
+        if (/\s/.test(c)) { frag.appendChild(document.createTextNode(c)); continue; }
+        const s = document.createElement('span'); s.className = 'ch'; s.textContent = c; frag.appendChild(s);
+      }
+      n.replaceWith(frag);
+    } else if (n.nodeType === 1 && n.tagName !== 'SUB') walk(n);
+  });
+  walk(root);
+  const list = [...root.querySelectorAll('.ch')];
+  CH.set(id, list);
+  return list;
+}
+function reveal(id, t, t0, rate = RATE, d = .45) {
+  chars(id).forEach((c, i) => { const p = easeOut(prog(t, t0 + i / rate, d)); c.style.opacity = p; c.style.transform = `translateY(${(1 - p) * 6}px)`; });
+}
+function cam(scene, scale, ox = 540, oy = 960, dx = 0, dy = 0) {
+  const c = scene.querySelector('.cam'); c.style.transformOrigin = `${ox}px ${oy}px`; c.style.transform = `translate(${dx}px,${dy}px) scale(${scale})`;
+}
+function clearCtx(ctx) { ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); }
+function ctxOf(id) { const c = document.querySelector(`#${id} canvas`); c.width = 1080; c.height = 1920; return c.getContext('2d'); }
+
+// ---------- 场景 ----------
+const S = {};
+
+// A 开场
+S.A = (() => {
+  const root = $('#sA'), ctx = ctxOf('sA'), svg = root.querySelector('svg');
+  const [sky] = starBins(1080, 1920, { seed: 11, count: 760, maxR: 2.3 });
+  const tw = twinklers(101, 36);
+  const rg = ring(svg, { cx: 540, cy: 1060, r: 760, opacity: .42 });
+  const youRing = el('circle', { cx: 300, cy: 1240, r: 30, fill: 'none', stroke: '#D0583F', 'stroke-width': 1.4, 'stroke-opacity': 0 }, svg);
+  return { root, start: 0, draw(t) {
+    clearCtx(ctx);
+    const sa = easeOut(prog(t, .6, 2.4));
+    ctx.globalAlpha = sa; ctx.drawImage(sky, 0, 0); ctx.globalAlpha = 1; drawTwinkle(ctx, tw, t, sa);
+    const y = easeOut(prog(t, .2, 1.4));
+    glow(ctx, 300, 1240, 46 * y, BONE, .22 * y); glow(ctx, 300, 1240, 14, BONE, .7 * y); dot(ctx, 300, 1240, 3.2, BONE, y);
+    const yr = easeOut(prog(t, .8, 1.0)); youRing.setAttribute('r', 18 + 12 * yr); youRing.setAttribute('stroke-opacity', .9 * yr);
+    rg.g.setAttribute('opacity', .42 * easeOut(prog(t, 1.0, 2.2))); rg.spin(t * .25);
+    reveal('aText', t, .25);
+    fadeIn($('#aYou'), t, 1.6); fadeIn($('#aCoord'), t, 3.0, 1.2);
+    cam(root, 1 + .035 * easeIO(prog(t, 0, 9.4)), 540, 1000);
+  } };
+})();
+
+// B 德雷克公式
+S.B = (() => {
+  const root = $('#sB'), ctx = ctxOf('sB'), svg = root.querySelector('svg'), start = sentStart('1961');
+  const bins = starBins(1080, 1920, { seed: 22, count: 900, maxR: 2.1, bins: 7 });
+  const rg = ring(svg, { cx: 540, cy: 900, r: 640, opacity: .28 });
+  const rows = [...root.querySelectorAll('.row')];
+  const rowT = [M.Rstar, M.fp, M.ne, M.fl, M.fi, M.fc, M.L + 1.2];
+  const seal = $('#bSeal'); buildSeal(seal);
+  const sealT = M.s1961 + 2.0, Lx = 226, Ly = 1241;
+  return { root, start, draw(t) {
+    clearCtx(ctx);
+    glow(ctx, 540, 900, 520, NIGHT, .10);
+    bins.forEach((b, i) => { const a = i === 0 ? 1 : 1 - easeIO(prog(t, rowT[i] + .2, .9)); if (a > 0) { ctx.globalAlpha = a; ctx.drawImage(b, 0, 0); } });
+    ctx.globalAlpha = 1;
+    rg.spin(-t * .3);
+    const st = $('#bStele'), sp = easeOut(prog(t, start + .1, 1.0));
+    st.style.opacity = sp; st.style.transform = `scale(${.985 + .015 * sp})`;
+    reveal('bDate', t, M.s1961 + .2, 10);
+    const shake = stamp(seal, t, sealT);
+    fadeIn($('#bN'), t, M.formula + 1.0, .8, 10);
+    reveal('bGal', t, M.galaxy + .3, 6);
+    rows.forEach((r, i) => { const p = easeOut(prog(t, rowT[i], .6)); r.style.opacity = p; r.style.transform = `translateX(${(1 - p) * 14}px)`; });
+    const lp = easeOut(prog(t, rowT[6] + .2, 1.2));
+    $('#bL').style.color = `rgb(${Math.round(lerp(201, 208, lp))},${Math.round(lerp(168, 88, lp))},${Math.round(lerp(106, 63, lp))})`;
+    $('#bL').style.textShadow = `0 0 ${22 * lp}px rgba(208,88,63,${.6 * lp})`;
+    $('#bUline').style.transform = `scaleX(${easeOut(prog(t, rowT[6] + .6, .9))})`;
+    // 推到 L，停一下，再拉远
+    const push = easeIO(prog(t, rowT[6] + .4, 2.0)) * (1 - easeIO(prog(t, M.shrink - .2, 2.6)));
+    cam(root, 1 + .22 * push, Lx, Ly, shake, 0);
+  } };
+})();
+
+// C 伦敦
+S.C = (() => {
+  const root = $('#sC'), ctx = ctxOf('sC'), start = M.y2010;
+  const [bg] = starBins(1080, 1920, { seed: 33, count: 260, maxR: 1.8, alpha: .7 });
+  const cx = 540, cy = 760, rx = 450, ry = 210, r = rng(303);
+  const layers = [off(), off(), off()], lx = layers.map((c) => c.getContext('2d')), special = [];
+  // 10510 粒星尘：9985 粒在第一次相乘时熄灭，262 粒第二次，237 粒第三次，最后剩 26 粒
+  const order = Array.from({ length: 10510 }, (_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+  const rank = new Int32Array(10510); order.forEach((v, k) => { rank[v] = k; });
+  for (let i = 0; i < 10510; i++) {
+    const rr = Math.sqrt(r()), th = r() * Math.PI * 2, x = cx + Math.cos(th) * rx * rr, y = cy + Math.sin(th) * ry * rr;
+    const s = .55 + r() * .45, c = r() < .35 ? GOLD : BONE, a = .12 + r() * .28, k = rank[i];
+    if (k < 26) special.push({ x, y, c });
+    else dot(lx[k < 263 ? 2 : k < 525 ? 1 : 0], x, y, s, c, a);
+  }
+  const rows = [...root.querySelectorAll('.lrow:not(.total)')], total = root.querySelector('.lrow.total'), rule = root.querySelector('.lrule');
+  const steps = [[M.x20, 10510, 525], [M.x2, 525, 263], [M.x10, 263, 26]];
+  return { root, start, draw(t) {
+    clearCtx(ctx);
+    ctx.globalAlpha = .9; ctx.drawImage(bg, 0, 0); ctx.globalAlpha = 1;
+    const appear = easeOut(prog(t, start + .3, 2.6));
+    glow(ctx, cx, cy, 520, GOLD, .05 * appear);
+    const fades = [M.x20 + .5, M.x2 + .4, M.x10 + .5];
+    layers.forEach((c, i) => { const a = appear * (1 - easeIO(prog(t, fades[i], .9))); if (a > 0) { ctx.globalAlpha = a; ctx.drawImage(c, 0, 0); } });
+    ctx.globalAlpha = 1;
+    const bright = easeOut(prog(t, M.n26 + .6, 1.1));
+    for (const p of special) { if (bright > 0) { glow(ctx, p.x, p.y, 26 * bright, BONE, .32 * bright); glow(ctx, p.x, p.y, 8, BONE, .8 * bright); } dot(ctx, p.x, p.y, .8 + 1.6 * bright, bright > .3 ? BONE : p.c, Math.max(.3 * appear, bright)); }
+    fadeIn($('#cKick'), t, start + .2, .8);
+    reveal('cT1', t, start + 1.2, 6); reveal('cT2', t, M.nogf, 5);
+    const rowT = [M.n10510, M.x20, M.x2, M.x10];
+    rows.forEach((row, i) => { const p = easeOut(prog(t, rowT[i], .5)); row.style.opacity = p; row.style.transform = `translateY(${(1 - p) * 8}px)`; });
+    rule.style.transform = `scaleX(${easeOut(prog(t, M.x20, .6))})`;
+    total.style.opacity = easeOut(prog(t, M.x20 + .1, .5));
+    let v = 10510;
+    for (const [t0, a, b] of steps) if (t >= t0) v = Math.round(lerp(a, b, easeIO(prog(t, t0 + .2, .7))));
+    $('#cTotal').textContent = v.toLocaleString('en-US');
+    $('#cTotal').style.transform = `scale(${1 + .08 * Math.sin(Math.PI * prog(t, M.n26 + .5, .5))})`;
+    $('#cTotal').style.transformOrigin = 'right center';
+    fadeIn($('#cOdds'), t, M.joke, .9);
+    cam(root, 1 + .02 * easeIO(prog(t, start, 30)));
+  } };
+})();
+
+// D 历书
+S.D = (() => {
+  const root = $('#sD'), ctx = ctxOf('sD'), start = M.yours;
+  const [bg] = starBins(1080, 1920, { seed: 44, count: 420, maxR: 1.9, alpha: .75 });
+  const tw = twinklers(404, 24);
+  const seal = $('#dSeal'); buildSeal(seal);
+  const cols = [['dC1', 'dB1', M.births], ['dC2', 'dB2', M.ratio], ['dC3', 'dB3', M.city], ['dC4', 'dB4', M.college], ['dC5', 'dB5', M.these]];
+  const vr = [...root.querySelectorAll('.vrule')];
+  return { root, start, draw(t) {
+    clearCtx(ctx);
+    glow(ctx, 540, 900, 640, NIGHT, .08); ctx.drawImage(bg, 0, 0); drawTwinkle(ctx, tw, t, .6);
+    const pg = easeOut(prog(t, start + .2, .9)); $('#dPage').style.opacity = pg; $('#dPage').style.transform = `translateY(${(1 - pg) * 24}px)`;
+    vr.forEach((v, i) => { v.style.transform = `scaleY(${easeOut(prog(t, start + .5 + i * .08, 1.0))})`; });
+    reveal('dKick', t, start + .1, 6);
+    reveal('dHead', t, start + 1.6, 4);
+    cols.forEach(([c, b, t0]) => { reveal(c, t, t0, 7); $('#' + b).style.transform = `scaleY(${easeOut(prog(t, t0 + .6, .9))})`; });
+    reveal('dDone', t, M.multiplied, 4);
+    const shake = stamp(seal, t, M.multiplied + 1.7);
+    cam(root, 1 + .025 * easeIO(prog(t, start, 24)), 540, 900, shake, 0);
+  } };
+})();
+
+// E 十二年，少了一半
+S.E = (() => {
+  const root = $('#sE'), ctx = ctxOf('sE'), start = M.changing;
+  const [bg] = starBins(1080, 1920, { seed: 55, count: 300, maxR: 1.8, alpha: .65 });
+  const r = rng(2013), pts = [];
+  const L = { x: 300, y: 740, R: 232 }, Rt = { x: 790, y: 740, R: 164 };
+  for (let i = 0; i < 1347; i++) {
+    const rr = L.R * Math.sqrt(r()), th = r() * Math.PI * 2;
+    pts.push({ x: L.x + Math.cos(th) * rr, y: L.y + Math.sin(th) * rr, s: 1.05 + Math.pow(r(), 3) * 1.7, a: .38 + r() * .6, c: r() < .3 ? GOLD : BONE, pop: r() * 1.2, lag: r() * .7 });
+  }
+  const r2 = rng(2025);
+  pts.forEach((p, i) => { if (i < 676) { const rr = Rt.R * Math.sqrt(r2()), th = r2() * Math.PI * 2; p.tx = Rt.x + Math.cos(th) * rr; p.ty = Rt.y + Math.sin(th) * rr; } });
+  return { root, start, draw(t) {
+    clearCtx(ctx);
+    ctx.globalAlpha = .9; ctx.drawImage(bg, 0, 0); ctx.globalAlpha = 1;
+    const mig = prog(t, M.y2025 + .2, 3.2);
+    glow(ctx, L.x, L.y, L.R * 1.45, GOLD, .07 * easeOut(prog(t, M.y2013, 1.2)) * (1 - .7 * mig));
+    glow(ctx, Rt.x, Rt.y, Rt.R * 1.45, GOLD, .07 * easeOut(mig));
+    for (let i = 0; i < pts.length; i++) {
+      const p = pts[i], a0 = easeOut(prog(t, M.y2013 + p.pop, .3));
+      if (a0 <= 0) continue;
+      let x = p.x, y = p.y, a = p.a * a0;
+      if (i < 676) { const q = easeIO(prog(t, M.y2025 + .2 + p.lag, 2.4)); x = lerp(p.x, p.tx, q); y = lerp(p.y, p.ty, q); }
+      else { const q = prog(t, M.y2025 + .2 + p.lag, 1.8); y += 34 * easeIn(q); a *= 1 - easeOut(q); }
+      if (a <= .01) continue;
+      dot(ctx, x, y, p.s, p.c, a);
+      if (p.s > 2.3) glow(ctx, x, y, p.s * 5, p.c, a * .25);
+    }
+    reveal('eKick', t, start + .1, 6); fadeIn($('#eNote'), t, start + .9, .8);
+    fadeIn($('#eY1'), t, M.y2013, .7, 12); fadeIn($('#eA1'), t, M.n1347, .7, 8);
+    fadeIn($('#eY2'), t, M.y2025, .7, 12); fadeIn($('#eA2'), t, M.n676, .7, 8);
+    reveal('eHalf', t, M.half, 5); fadeIn($('#eSrc'), t, M.half + 1.6, .9);
+    cam(root, 1 + .02 * easeIO(prog(t, start, 14)));
+  } };
+})();
+
+// F 你和星盘
+S.F = (() => {
+  const root = $('#sF'), ctx = ctxOf('sF'), svg = root.querySelector('svg'), start = M.notgood;
+  const [bg] = starBins(1080, 1920, { seed: 99, count: 520, maxR: 2.0 });
+  const tw = twinklers(909, 30);
+  const outer = ring(svg, { cx: 540, cy: 980, r: 700, opacity: .2, labels: false });
+  const inner = ring(svg, { cx: 540, cy: 980, r: 430, opacity: .5 });
+  el('circle', { cx: 540, cy: 980, r: 30, fill: 'none', stroke: '#D0583F', 'stroke-width': 1.4, 'stroke-opacity': .9 }, svg);
+  return { root, start, draw(t) {
+    clearCtx(ctx);
+    ctx.drawImage(bg, 0, 0); drawTwinkle(ctx, tw, t, .8);
+    glow(ctx, 540, 980, 46, BONE, .22); glow(ctx, 540, 980, 14, BONE, .7); dot(ctx, 540, 980, 3.2, BONE, 1);
+    const k = t - start;
+    inner.spin(k * 12); outer.spin(-k * 3);
+    cam(root, 1 + .05 * easeIO(prog(t, start - .5, 13)), 540, 980);
+  } };
+})();
+
+// G 银河与城市：画一张 1080×2620 的长图，镜头从天空摇到城市
+S.G = (() => {
+  const root = $('#sG'), ctx = ctxOf('sG'), start = M.fermi, H = 2620, TILT = 700;
+  const tall = off(1080, H), tc = tall.getContext('2d');
+  { const g = tc.createRadialGradient(540, 700, 0, 540, 700, 1500); g.addColorStop(0, '#171D33'); g.addColorStop(.55, '#0E111C'); g.addColorStop(1, '#0A0B10'); tc.fillStyle = g; tc.fillRect(0, 0, 1080, H); }
+  tc.drawImage(starBins(1080, H, { seed: 66, count: 760, maxR: 2.0, alpha: .8 })[0], 0, 0);
+  const r = rng(606), x1 = -260, y1 = 120, x2 = 1340, y2 = 1180, dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy), nx = -dy / len, ny = dx / len;
+  for (let i = 0; i <= 48; i++) { const q = i / 48; glow(tc, x1 + dx * q, y1 + dy * q, 300, NIGHT, .07); glow(tc, x1 + dx * q, y1 + dy * q, 150, BONE, .03); }
+  for (let i = 0; i < 16000; i++) { const q = r(), o = gauss(r) * 125 * (.65 + .35 * Math.sin(q * 11)); dot(tc, x1 + dx * q + nx * o, y1 + dy * q + ny * o, .3 + Math.pow(r(), 4) * 1.7, r() < .14 ? GOLD : BONE, .1 + r() * .5); }
+  tc.save(); tc.globalCompositeOperation = 'multiply';
+  for (let i = 0; i <= 140; i++) { const q = i / 140, w = Math.sin(q * 6.3) * 34 + Math.sin(q * 17 + 1.3) * 14; glow(tc, x1 + dx * q + nx * (w - 12), y1 + dy * q + ny * (w - 12), 70 + 30 * Math.sin(q * 9), '10,11,16', .16); }
+  tc.restore();
+  { const h = tc.createLinearGradient(0, 1700, 0, H); h.addColorStop(0, 'rgba(201,168,106,0)'); h.addColorStop(.5, 'rgba(201,168,106,.09)'); h.addColorStop(1, 'rgba(201,168,106,.05)'); tc.fillStyle = h; tc.fillRect(0, 1700, 1080, H - 1700); }
+  const c = rng(909), lit = [];
+  let x = -12;
+  while (x < 1092) {
+    const w = 36 + c() * 96, bh = 260 + Math.pow(c(), 1.5) * 640, y = H - bh;
+    tc.fillStyle = 'rgba(12,14,22,.97)'; tc.fillRect(x, y, w - 5, bh);
+    tc.fillStyle = 'rgba(201,168,106,.22)'; tc.fillRect(x, y, w - 5, 1);
+    for (let wy = y + 14; wy < H - 8; wy += 15) for (let wx = x + 7; wx < x + w - 13; wx += 11) {
+      if (c() < .3) { const a = .3 + c() * .65, col = c() < .62 ? GOLD : BONE; tc.fillStyle = `rgba(${col},${a})`; tc.fillRect(wx, wy, 4, 5); lit.push({ x: wx, y: wy, a, col }); }
+    }
+    x += w;
+  }
+  // 念到"谁先认真"时熄灭的那扇窗：选画面中下部最亮的一扇
+  const target = lit.filter((p) => Math.abs(p.x - 520) < 140 && Math.abs(p.y - 2240) < 120).sort((a, b) => b.a - a.a)[0] || lit[0];
+  tc.fillStyle = `rgba(${BONE},1)`; tc.fillRect(target.x, target.y, 4, 5);
+  const blink = Array.from({ length: 50 }, () => lit[Math.floor(c() * lit.length)]);
+  const title = $('#gTitle'), quote = $('#gQuote');
+  return { root, start, draw(t) {
+    const tilt = TILT * easeIO(prog(t, M.listen - .5, M.cityalso + 1.5 - (M.listen - .5)));
+    ctx.drawImage(tall, 0, tilt, 1080, 1920, 0, 0, 1080, 1920);
+    for (const p of blink) { const k = .5 + .5 * Math.sin(t * 1.3 + p.x * .37 + p.y * .11); ctx.fillStyle = `rgba(${p.col},${.35 * k})`; ctx.fillRect(p.x - 1, p.y - tilt - 1, 6, 7); }
+    glow(ctx, target.x + 2, target.y - tilt + 2, 18, BONE, .35 * (1 - easeOut(prog(t, M.serious + .4, .5))));
+    const off_ = easeOut(prog(t, M.serious + .4, .5));
+    if (off_ > 0) { ctx.fillStyle = `rgba(12,14,22,${off_})`; ctx.fillRect(target.x - 1, target.y - tilt - 1, 6, 7); }
+    reveal('gTitle', t, M.where + .3, RATE);
+    const out = 1 - easeIO(prog(t, M.listen + 1.5, 1.6));
+    title.style.opacity = out; quote.style.opacity = easeOut(prog(t, M.fermi + 1.0, 1.0)) * out;
+    cam(root, 1 + .02 * easeIO(prog(t, start, 32)));
+  } };
+})();
+
+// H 金唱片
+S.H = (() => {
+  const root = $('#sH'), ctx = ctxOf('sH'), svg = root.querySelector('svg'), start = M.spoke;
+  const [bg] = starBins(1080, 1920, { seed: 77, count: 560, maxR: 2.0 });
+  const cx = 540, cy = 720, R = 300;
+  const rec = el('g', {}, svg), spin = el('g', {}, rec);
+  el('circle', { cx, cy, r: R, fill: 'rgba(201,168,106,.06)', stroke: '#C9A86A', 'stroke-width': 1.6 }, rec);
+  for (let rr = 132; rr < R - 4; rr += 3) el('circle', { cx, cy, r: rr, fill: 'none', stroke: '#C9A86A', 'stroke-width': .7, 'stroke-opacity': (.16 + .2 * (Math.sin(rr * .21) + 1) / 2).toFixed(3) }, rec);
+  el('circle', { cx, cy, r: 122, fill: '#120F0B', stroke: '#C9A86A', 'stroke-width': 1.2 }, rec);
+  rec.appendChild(spin);
+  el('circle', { cx, cy, r: 4, fill: '#C9A86A' }, spin);
+  const k = rng(1977);
+  [[8, 108], [31, 64], [52, 92], [77, 46], [103, 84], [128, 70], [152, 104], [176, 58], [203, 96], [228, 52], [251, 88], [279, 66], [306, 100], [333, 74]].forEach(([deg, l]) => {
+    const a = deg * Math.PI / 180;
+    el('line', { x1: cx, y1: cy, x2: cx + Math.cos(a) * l, y2: cy + Math.sin(a) * l, stroke: '#C9A86A', 'stroke-width': 1 }, spin);
+    for (let i = 0; i < 6; i++) { const q = .35 + i * .1, px = cx + Math.cos(a) * l * q, py = cy + Math.sin(a) * l * q, s = k() < .5 ? 4 : 7; el('line', { x1: px - Math.sin(a) * s, y1: py + Math.cos(a) * s, x2: px + Math.sin(a) * s, y2: py - Math.cos(a) * s, stroke: '#C9A86A', 'stroke-width': .8, 'stroke-opacity': .85 }, spin); }
+  });
+  el('line', { x1: cx, y1: cy, x2: cx + 116, y2: cy, stroke: '#C9A86A', 'stroke-width': 1.4 }, spin);
+  el('path', { id: 'rimA', d: `M ${cx - R - 26} ${cy} a ${R + 26} ${R + 26} 0 1 1 ${2 * (R + 26)} 0`, fill: 'none' }, spin);
+  const tx = el('text', { fill: '#C9A86A', 'fill-opacity': .7, 'font-size': 21, 'font-family': 'EB Garamond', 'font-style': 'italic', 'letter-spacing': 4 }, spin);
+  el('textPath', { href: '#rimA', startOffset: '50%', 'text-anchor': 'middle' }, tx).textContent = 'To the makers of music — all worlds, all times';
+  el('circle', { cx, cy, r: R - 2, fill: 'url(#sheen)' }, rec);
+  const hx = cx + 248, hy = cy + 300, hyd = el('g', { stroke: '#C9A86A', 'stroke-opacity': .8, fill: 'none', 'stroke-width': 1.2 }, rec);
+  el('circle', { cx: hx - 19, cy: hy, r: 9 }, hyd); el('circle', { cx: hx + 19, cy: hy, r: 9 }, hyd); el('line', { x1: hx - 10, y1: hy, x2: hx + 10, y2: hy }, hyd); el('line', { x1: hx, y1: hy + 16, x2: hx, y2: hy + 26 }, hyd);
+  const probe = el('g', { stroke: '#ECE4D3', 'stroke-width': 1.2, fill: 'none', opacity: 0 }, svg);
+  el('ellipse', { cx: 0, cy: 0, rx: 20, ry: 7 }, probe); el('line', { x1: 0, y1: 7, x2: 0, y2: 22 }, probe); el('rect', { x: -7, y: 22, width: 14, height: 9 }, probe); el('line', { x1: 7, y1: 27, x2: 62, y2: 42 }, probe); el('line', { x1: -7, y1: 27, x2: -30, y2: 46 }, probe);
+  return { root, start, draw(t) {
+    clearCtx(ctx);
+    ctx.drawImage(bg, 0, 0);
+    const ap = easeOut(prog(t, start + .3, 1.6));
+    glow(ctx, cx, cy, 460, GOLD, .08 * ap);
+    rec.setAttribute('opacity', ap); rec.setAttribute('transform', `translate(${cx} ${cy}) scale(${.94 + .06 * ap}) translate(${-cx} ${-cy})`);
+    spin.setAttribute('transform', `rotate(${(t - start) * 18} ${cx} ${cy})`);
+    reveal('hKick', t, M.voyager, 6); reveal('hNote', t, M.langs, 8);
+    $('#hGreet').style.opacity = 1 - easeIO(prog(t, M.flying - .6, 1.0));
+    reveal('hG1', t, M.greet1, RATE); reveal('hG2', t, M.greet2, RATE); reveal('hG3', t, M.greet3, RATE);
+    // 探测器：先停在右上角，"它飞了快五十年"时飞出画面
+    const q = easeIn(prog(t, M.flying, 6.0)), px = lerp(872, 1190, q), py = lerp(300, -30, q);
+    probe.setAttribute('opacity', .85 * easeOut(prog(t, start + 1.5, 1.2)));
+    probe.setAttribute('transform', `translate(${px} ${py}) rotate(-28)`);
+    for (let i = 1; i <= 16; i++) dot(ctx, px - i * 9, py + i * 8.5 * (1 - .3 * q), 1.1, BONE, Math.max(0, .5 - i * .03) * easeOut(prog(t, start + 1.5, 1.2)));
+    cam(root, 1 + .02 * easeIO(prog(t, start, 27)));
+  } };
+})();
+
+// I 结尾
+S.I = (() => {
+  const root = $('#sI'), ctx = ctxOf('sI'), svg = root.querySelector('svg'), start = sentStart('你的公式里');
+  const [bg] = starBins(1080, 1920, { seed: 88, count: 640, maxR: 2.1 });
+  const tw = twinklers(808, 30);
+  const rg = ring(svg, { cx: 540, cy: 2070, r: 820, opacity: .3 });
+  const seal = $('#iSeal'); buildSeal(seal);
+  const terms = [...$('#iEq').children].filter((x) => x.id !== 'iL');
+  return { root, start, draw(t) {
+    clearCtx(ctx);
+    ctx.drawImage(bg, 0, 0); drawTwinkle(ctx, tw, t, .7);
+    const lp = easeOut(prog(t, M.onlyL + 1.2, 1.2));
+    glow(ctx, 862, 316, 120, CIN, .16 * lp);
+    rg.spin(-(t - start) * .4);
+    fadeIn($('#iEq'), t, start + .2, 1.2);
+    const dim = easeIO(prog(t, M.history, 1.2));
+    terms.forEach((x) => { x.style.color = `rgba(${Math.round(lerp(236, 122, dim))},${Math.round(lerp(228, 127, dim))},${Math.round(lerp(211, 146, dim))},${lerp(.62, .75, dim)})`; });
+    const L = $('#iL');
+    L.style.color = `rgb(${Math.round(lerp(236, 208, lp))},${Math.round(lerp(228, 88, lp))},${Math.round(lerp(211, 63, lp))})`;
+    L.style.textShadow = `0 0 ${26 * lp}px rgba(208,88,63,${.6 * lp})`;
+    const shake = stamp(seal, t, M.inhand + 1.6);
+    reveal('iO1', t, M.out1, RATE); reveal('iO2', t, M.out2, RATE); reveal('iO3', t, M.out3, 2.6);
+    fadeIn($('#iLogo'), t, M.out3 + 1.4, 1.0); fadeIn($('#iEp'), t, M.out3 + 2.0, 1.0);
+    cam(root, 1 + .02 * easeIO(prog(t, start, 26)), 540, 960, shake, 0);
+  } };
+})();
+
+const SCENES = [S.A, S.B, S.C, S.D, S.E, S.F, S.G, S.H, S.I];
+
+// ---------- 总控 ----------
+const sub = $('#sub'), mark = $('#mark'), black = $('#black');
+let subsOn = false;
+window.setSubs = (on) => { subsOn = on; sub.style.visibility = on && sub.textContent ? 'visible' : 'hidden'; };
+window.subAt = (t) => TL.subs.find((s) => t >= s.start && t < s.end) || null;
+window.seek = (t) => {
+  SCENES.forEach((s, k) => {
+    const inStart = k === 0 ? -1 : s.start - XF / 2;
+    const outEnd = k === SCENES.length - 1 ? Infinity : SCENES[k + 1].start + XF / 2;
+    const vis = t >= inStart && t < outEnd;
+    s.root.style.visibility = vis ? 'visible' : 'hidden';
+    if (!vis) return;
+    s.root.style.opacity = k === 0 ? 1 : easeIO(prog(t, inStart, XF));
+    s.draw(t);
+  });
+  mark.style.opacity = easeOut(prog(t, 2.0, 1.0)) * (1 - easeOut(prog(t, S.I.start - .5, 1.0)));
+  black.style.opacity = Math.max(1 - easeOut(prog(t, 0, 1.2)), easeIn(prog(t, TL.total - 1.6, 1.6)));
+  const s = window.subAt(t);
+  sub.textContent = s ? s.text : '';
+  sub.style.visibility = subsOn && s ? 'visible' : 'hidden';
+};
+window.TOTAL = TL.total;
+document.body.dataset.ready = '1';
+</script>
+</body>
+</html>
