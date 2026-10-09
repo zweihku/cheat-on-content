@@ -1,5 +1,7 @@
 # 临时配乐随时可以用 src/sound.py 重新生成，40 MB 的 wav 不进 git
 temp_audio.wav
-# 渲染中间文件和静帧检查
+# 渲染出来的视频是中间产物：跑 src/render.cjs 就能重新生成，不占 git / LFS 额度
+# （成片 final.mp4 放在上一级的 EP 文件夹里，照常走 LFS）
+EP01_*.mp4
 .EP01_subs*.mp4
 src/stills/
