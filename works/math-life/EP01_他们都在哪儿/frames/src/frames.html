@@ -93,6 +93,12 @@ body { display: flex; flex-direction: column; gap: 40px; align-items: flex-start
 .year { position: absolute; width: 420px; text-align: center; font-family: var(--en); font-variant-numeric: lining-nums; font-size: 92px; color: var(--gold); line-height: 1; }
 .amount { position: absolute; width: 420px; text-align: center; font-size: 40px; letter-spacing: .06em; }
 
+/* 封面 */
+.frame.short, .frame.short > canvas, .frame.short > svg.layer { height: 1440px; }
+.cover-title { position: absolute; left: 84px; right: 84px; }
+.cover-title .a { font-size: 74px; font-weight: 600; color: var(--gold); letter-spacing: .08em; }
+.cover-title .b { font-size: 158px; font-weight: 900; line-height: 1.12; letter-spacing: .04em; margin-top: 18px; text-shadow: 0 4px 30px rgba(0, 0, 0, .6); }
+
 /* f08 */
 .eqline { position: absolute; left: 0; right: 0; top: 268px; text-align: center; font-family: var(--en); font-style: italic; font-size: 66px; color: rgba(122, 127, 146, .75); letter-spacing: .02em; }
 .eqline .L { color: var(--cinnabar-hi); text-shadow: 0 0 26px rgba(208, 88, 63, .6); }
@@ -259,6 +265,32 @@ body { display: flex; flex-direction: column; gap: 40px; align-items: flex-start
     <div style="font-size:58px; font-weight:900; letter-spacing:.6em; margin-left:.6em;">余数</div>
     <div class="dust" style="font-size:24px; letter-spacing:.4em; margin-top:18px; margin-left:.4em;">第一集　他们都在哪儿</div>
   </div>
+  <div class="grain"></div><div class="vignette"></div>
+</section>
+
+<!-- 封面 9:16（抖音 / 视频号）-->
+<section class="frame" id="c916" data-name="cover-9x16" data-title="封面 9:16">
+  <canvas></canvas><svg class="layer" viewBox="0 0 1080 1920"></svg>
+  <div class="abs kicker" style="left:84px; top:250px;">余数　第一集</div>
+  <div class="cover-title" style="top:330px;">
+    <div class="a">用找外星人的公式</div>
+    <div class="b">算你为什么<br>还单身</div>
+  </div>
+  <div class="eqline" style="top:1010px; font-size:56px;">N = R<sub>∗</sub> · f<sub>p</sub> · n<sub>e</sub> · f<sub>l</sub> · f<sub>i</sub> · f<sub>c</sub> · <span class="L">L</span></div>
+  <div class="seal" data-seal="由你" style="left:836px; top:1102px; width:112px; height:112px; transform:rotate(-5deg);"></div>
+  <div class="grain"></div><div class="vignette"></div>
+</section>
+
+<!-- 封面 3:4（小红书）-->
+<section class="frame short" id="c34" data-name="cover-3x4" data-title="封面 3:4">
+  <canvas></canvas><svg class="layer" viewBox="0 0 1080 1440"></svg>
+  <div class="abs kicker" style="left:84px; top:150px;">余数　第一集</div>
+  <div class="cover-title" style="top:226px;">
+    <div class="a">用找外星人的公式</div>
+    <div class="b">算你为什么<br>还单身</div>
+  </div>
+  <div class="eqline" style="top:900px; font-size:56px;">N = R<sub>∗</sub> · f<sub>p</sub> · n<sub>e</sub> · f<sub>l</sub> · f<sub>i</sub> · f<sub>c</sub> · <span class="L">L</span></div>
+  <div class="seal" data-seal="由你" style="left:836px; top:992px; width:112px; height:112px; transform:rotate(-5deg);"></div>
   <div class="grain"></div><div class="vignette"></div>
 </section>
 
@@ -510,6 +542,19 @@ function seal(box) {
   glow(ctx, 862, 316, 120, CIN, .16);
   document.querySelectorAll('#f08 .seal').forEach(seal);
 })();
+
+// 封面：星空 + 二十八宿星盘 + 带朱砂圈的"你"，两个尺寸共用一套画法
+[['c916', 1920, 1510, 1043], ['c34', 1440, 1150, 933]].forEach(([id, h, ry, eqY]) => {
+  const f = document.getElementById(id);
+  const c = f.querySelector('canvas'); c.width = 1080; c.height = h;
+  const ctx = c.getContext('2d'), svg = f.querySelector('svg.layer');
+  stars(ctx, { seed: 116, count: Math.round(760 * h / 1920), maxR: 2.3, h });
+  glow(ctx, 540, ry, 520, NIGHT, .12);
+  ring(svg, { cx: 540, cy: ry + 520, r: 620, opacity: .38 });
+  youStar(ctx, svg, 540, ry - 40);
+  glow(ctx, 868, eqY, 110, CIN, .14);
+  f.querySelectorAll('.seal').forEach(seal);
+});
 
 document.querySelectorAll('#f02 .seal').forEach(seal);
 document.body.dataset.ready = '1';
